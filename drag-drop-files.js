@@ -13,6 +13,7 @@ import {
 }                 from '@spriteful/spriteful-element/spriteful-element.js';
 import htmlString from './drag-drop-files.html';
 import '@spriteful/app-icons/app-icons.js';
+import '@spriteful/cms-icons/cms-icons.js';
 import '@polymer/iron-icon/iron-icon.js';
 import './file-item.js';
 
@@ -35,7 +36,8 @@ class SpritefulDragDropFiles extends SpritefulElement {
 
       label: {
         type: String,
-        value: 'Drop files here or click'
+        // value: 'Drop files here or click'
+        computed: '__computeLabel(multiple)'
       },
 
       multiple: {
@@ -55,6 +57,12 @@ class SpritefulDragDropFiles extends SpritefulElement {
         type: String,
         value: 'Kb',
         _observer: '_unitChanged'
+      },
+
+            
+      _fileType: {
+        type: String,
+        computed: '__computeFileType(accept)'
       },
 
       accept: {
@@ -114,6 +122,14 @@ class SpritefulDragDropFiles extends SpritefulElement {
     this.$.droparea.addEventListener('drop', this.__handleDrop.bind(this), false);
   }
 
+  
+  __computeLabel(multiple) {
+    return multiple ? 'Drop files here or click' : 'Drop file here or click';
+  }
+
+  __computeFileType(accept) {
+    return accept === 'audio' ? 'audio/*' : 'image/*';
+  }
 
   _unitChanged(newUnit, oldUnit) {
     const newUnitLowerCase = newUnit.toLowerCase();
